@@ -139,6 +139,15 @@ function renderSalesRows(totalYears, existingValues = []) {
   attachCurrencyFormatter(salesTableBody);
 }
 
+function syncSalesRowsWithProjectLife() {
+  const desiredYears = Math.max(1, Number(fields.projectLife.value) || 1);
+  const currentYears = document.querySelectorAll(".sales-input").length;
+
+  if (desiredYears !== currentYears) {
+    renderSalesRows(desiredYears);
+  }
+}
+
 function getSalesForecastFromTable() {
   return Array.from(document.querySelectorAll(".sales-input"))
     .map((input) => sanitizeNumber(input.value))
@@ -498,6 +507,12 @@ function handleCalculation(event) {
   event.preventDefault();
 
   try {
+    syncSalesRowsWithProjectLife();
+
+    if (!form.reportValidity()) {
+      return;
+    }
+
     const inputs = getInputs();
     const { metrics, annualRows } = calculateMetrics(inputs);
     renderResults(metrics, inputs, annualRows);
@@ -513,8 +528,11 @@ form.addEventListener("submit", handleCalculation);
 generateSalesRowsBtn.addEventListener("click", () => {
   renderSalesRows(fields.projectLife.value);
 });
+fields.projectLife.addEventListener("input", () => {
+  syncSalesRowsWithProjectLife();
+});
 fields.projectLife.addEventListener("change", () => {
-  renderSalesRows(fields.projectLife.value);
+  syncSalesRowsWithProjectLife();
 });
 loadCaseBtn.addEventListener("click", () => {
   setFormValues(caseData);
