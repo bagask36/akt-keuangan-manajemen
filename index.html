@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Kelayakan Investasi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <section class="hero card">
+      <div>
+        <p class="eyebrow">Aplikasi Web</p>
+        <h1>Kalkulator NPV, IRR, ARR, Payback Period, dan Profitability Index</h1>
+      </div>
+      <button id="loadCaseBtn" class="secondary-btn" type="button">Muat Studi Kasus</button>
+    </section>
+
+    <section class="grid-layout">
+      <form id="investmentForm" class="card form-card">
+        <h2>Input Data Investasi</h2>
+
+        <div class="form-grid">
+          <label>
+            <span>Modal Kerja (Rp)</span>
+            <input id="workingCapital" type="text" inputmode="numeric" data-currency="true" required>
+          </label>
+
+          <label>
+            <span>Modal Tetap (Rp)</span>
+            <input id="fixedCapital" type="text" inputmode="numeric" data-currency="true" required>
+          </label>
+
+          <label>
+            <span>Usia Ekonomis (Tahun)</span>
+            <input id="projectLife" type="number" min="1" step="1" required>
+          </label>
+
+          <label>
+            <span>Nilai Residu (Rp)</span>
+            <input id="salvageValue" type="text" inputmode="numeric" data-currency="true" required>
+          </label>
+
+          <label>
+            <span>Biaya Variabel (%)</span>
+            <input id="variableCostRate" type="number" min="0" max="100" step="0.01" required>
+          </label>
+
+          <label>
+            <span>Biaya Tetap Tahunan (Rp)</span>
+            <input id="fixedCost" type="text" inputmode="numeric" data-currency="true" required>
+          </label>
+
+          <label>
+            <span>Pajak (%)</span>
+            <input id="taxRate" type="number" min="0" max="100" step="0.01" required>
+          </label>
+
+          <label>
+            <span>Required Rate / Diskonto (%)</span>
+            <input id="discountRate" type="number" min="0" step="0.01" required>
+          </label>
+
+          <label>
+            <span>Target Payback (Tahun)</span>
+            <input id="targetPayback" type="number" min="0" step="0.01">
+          </label>
+        </div>
+
+        <section class="full-width sales-section">
+          <div class="sales-header">
+            <div>
+              <span class="section-label">Proyeksi Penjualan Tahunan</span>
+              <p>Isi penjualan untuk setiap tahun proyek pada tabel berikut.</p>
+            </div>
+            <button id="generateSalesRowsBtn" class="ghost-btn" type="button">Perbarui Tabel</button>
+          </div>
+
+          <div class="sales-table-wrapper">
+            <table class="sales-table">
+              <thead>
+                <tr>
+                  <th>Tahun</th>
+                  <th>Proyeksi Penjualan (Rp)</th>
+                </tr>
+              </thead>
+              <tbody id="salesTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="button-row">
+          <button class="primary-btn" type="submit">Hitung Kelayakan</button>
+          <button id="resetBtn" class="ghost-btn" type="button">Reset</button>
+        </div>
+      </form>
+
+      <section class="card result-card">
+        <div class="result-header">
+          <h2>Hasil Perhitungan</h2>
+          <span id="overallBadge" class="badge neutral">Menunggu perhitungan</span>
+        </div>
+
+        <div class="result-grid">
+          <article class="metric-box">
+            <p>NPV</p>
+            <strong id="npvValue">-</strong>
+            <small id="npvNote">Belum dihitung</small>
+          </article>
+
+          <article class="metric-box">
+            <p>IRR</p>
+            <strong id="irrValue">-</strong>
+            <small id="irrNote">Belum dihitung</small>
+          </article>
+
+          <article class="metric-box">
+            <p>ARR</p>
+            <strong id="arrValue">-</strong>
+            <small id="arrNote">Belum dihitung</small>
+          </article>
+
+          <article class="metric-box">
+            <p>Payback Period</p>
+            <strong id="paybackValue">-</strong>
+            <small id="paybackNote">Belum dihitung</small>
+          </article>
+
+          <article class="metric-box">
+            <p>Profitability Index</p>
+            <strong id="piValue">-</strong>
+            <small id="piNote">Belum dihitung</small>
+          </article>
+        </div>
+
+        <div class="formula card-soft">
+          <h3>Rumus Yang Digunakan</h3>
+          <ul>
+            <li>NPV = present value cash inflow - cash outflow investasi awal</li>
+            <li>IRR = r1 + (NPV positif / (NPV positif - NPV negatif)) x (r2 - r1)</li>
+            <li>ARR = rata-rata EAT / rata-rata investasi x 100%</li>
+            <li>PBP = tahun sebelum balik modal + sisa investasi / cash flow tahun pengembaliannya</li>
+            <li>PI = PV of cash flow / investasi</li>
+          </ul>
+        </div>
+
+        <div class="card-soft">
+          <h3>Ringkasan Arus Kas</h3>
+          <div id="cashflowSummary" class="cashflow-summary">
+            Masukkan data lalu klik tombol hitung.
+          </div>
+        </div>
+
+        <div class="card-soft">
+          <h3>Kesimpulan</h3>
+          <p id="conclusionText">Belum ada kesimpulan.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
