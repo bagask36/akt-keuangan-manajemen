@@ -138,13 +138,67 @@
 
         <div class="formula card-soft">
           <h3>Rumus Yang Digunakan</h3>
-          <ul>
-            <li>NPV = present value cash inflow - cash outflow investasi awal</li>
-            <li>IRR = r1 + (NPV positif / (NPV positif - NPV negatif)) x (r2 - r1)</li>
-            <li>ARR = rata-rata EAT / rata-rata investasi x 100%</li>
-            <li>PBP = tahun sebelum balik modal + sisa investasi / cash flow tahun pengembaliannya</li>
-            <li>PI = PV of cash flow / investasi</li>
-          </ul>
+          <div class="formula-grid">
+            <article class="formula-item">
+              <p>NPV</p>
+              <div class="equation">
+                NPV = -C<sub>0</sub> +
+                <span class="sigma">
+                  &Sigma;<sup>n</sup><sub>t=1</sub>
+                </span>
+                <span class="fraction">
+                  <span class="top">CF<sub>t</sub></span>
+                  <span class="bottom">(1 + r)<sup>t</sup></span>
+                </span>
+              </div>
+            </article>
+
+            <article class="formula-item">
+              <p>IRR</p>
+              <div class="equation">
+                IRR = r<sub>1</sub> +
+                <span class="fraction">
+                  <span class="top">NPV<sub>+</sub></span>
+                  <span class="bottom">NPV<sub>+</sub> - NPV<sub>-</sub></span>
+                </span>
+                (r<sub>2</sub> - r<sub>1</sub>)
+              </div>
+            </article>
+
+            <article class="formula-item">
+              <p>ARR</p>
+              <div class="equation">
+                ARR =
+                <span class="fraction">
+                  <span class="top">Rata-rata EAT</span>
+                  <span class="bottom">Rata-rata Investasi</span>
+                </span>
+                x 100%
+              </div>
+            </article>
+
+            <article class="formula-item">
+              <p>PBP</p>
+              <div class="equation">
+                PBP = n +
+                <span class="fraction">
+                  <span class="top">Sisa Investasi</span>
+                  <span class="bottom">Cash Flow Tahun Berikutnya</span>
+                </span>
+              </div>
+            </article>
+
+            <article class="formula-item">
+              <p>PI</p>
+              <div class="equation">
+                PI =
+                <span class="fraction">
+                  <span class="top">PV Cash Flow</span>
+                  <span class="bottom">PV Investasi</span>
+                </span>
+              </div>
+            </article>
+          </div>
         </div>
 
         <div class="card-soft">

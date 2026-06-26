@@ -316,7 +316,7 @@ function evaluateFeasibility(metrics, targetPayback) {
   decisions.push(metrics.npv > 0);
   decisions.push(metrics.pi > 1);
   decisions.push(metrics.irr !== null && metrics.irr > metrics.discountRate);
-  decisions.push(metrics.arr > 0);
+  decisions.push(metrics.arr > metrics.discountRate);
 
   if (targetPayback > 0) {
     decisions.push(metrics.payback !== null && metrics.payback <= targetPayback);
@@ -391,7 +391,8 @@ function renderResults(metrics, inputs, annualRows) {
     output.arrValue,
     output.arrNote,
     formatPercent(metrics.arr * 100),
-    `Rata-rata EAT ${formatCurrency(metrics.averageProfit)} dibagi rata-rata investasi ${formatCurrency(metrics.averageInvestment)}.`
+    `Rata-rata EAT ${formatCurrency(metrics.averageProfit)} dibagi rata-rata investasi ${formatCurrency(metrics.averageInvestment)}. ` +
+      `${metrics.arr > metrics.discountRate ? "ARR > required rate, proyek layak." : "ARR <= required rate, proyek kurang layak."}`
   );
 
   updateMetric(
@@ -408,7 +409,8 @@ function renderResults(metrics, inputs, annualRows) {
     output.piValue,
     output.piNote,
     decimalFormatter.format(metrics.pi),
-    metrics.pi > 1 ? "PI di atas 1, proyek menarik." : "PI di bawah atau sama dengan 1."
+    `PV penerimaan ${formatCurrency(metrics.presentValueInflows)} dibanding PV investasi ${formatCurrency(metrics.initialInvestment)}. ` +
+      `${metrics.pi > 1 ? "PI > 1, proyek layak." : "PI <= 1, proyek kurang layak."}`
   );
 
   buildCashflowRows(annualRows);
@@ -465,7 +467,7 @@ function calculateMetrics(inputs) {
   const pi = presentValueInflows / initialInvestment;
   const averageProfit =
     accountingProfits.reduce((accumulator, value) => accumulator + value, 0) / accountingProfits.length;
-  const averageInvestment = (inputs.fixedCapital + inputs.salvageValue) / 2;
+  const averageInvestment = (initialInvestment + inputs.salvageValue) / 2;
   const arr = averageProfit / averageInvestment;
 
   return {
